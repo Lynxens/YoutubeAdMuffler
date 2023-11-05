@@ -14,22 +14,22 @@ async function setupAdMuffler() {
     });
 
     youtubeEventChannel.onAdStarted(() => {
-        startAdDulling();
+        startAdMuffling();
     });
 
     youtubeEventChannel.onAdPlaying(() => {
         if (!isDullingAd) {
-            startAdDulling();
+            startAdMuffling();
         }
     });
 
     youtubeEventChannel.onNextAd(() => {
         isDullingAd = false;
-        startAdDulling();
+        startAdMuffling();
     });
 
     youtubeEventChannel.onAdEnded(() => {
-        stopAdDulling();
+        stopAdMuffling();
     });
 
     youtubeEventChannel.startListener();
@@ -42,7 +42,7 @@ async function setupAdMuffler() {
         (<HTMLButtonElement|null>youtubePlayer?.querySelector('.ytp-mute-button'))?.click();
     }
 
-    function startAdDulling() {
+    function startAdMuffling() {
         if (!youtubePlayer) {
             return;
         }
@@ -61,7 +61,7 @@ async function setupAdMuffler() {
         isDullingAd = true;
     }
 
-    function stopAdDulling() {
+    function stopAdMuffling() {
         if (!youtubePlayer) {
             return;
         }

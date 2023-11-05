@@ -1,11 +1,13 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const ZipPlugin = require('zip-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     mode: "production",
     entry: {
-        'youtube-ad-muffler': path.resolve(__dirname, "../src/youtube-ad-muffler.ts"),
+        'chrome/youtube-ad-muffler': path.resolve(__dirname, "../src/youtube-ad-muffler.ts"),
+        'firefox/youtube-ad-muffler': path.resolve(__dirname, "../src/youtube-ad-muffler.ts"),
     },
     output: {
         path: path.join(__dirname, "../dist"),
@@ -26,7 +28,13 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new CopyPlugin({
-            patterns: [{from: ".", to: ".", context: "public"}]
+            patterns: [
+                {from: ".", to: ".", context: "public"},
+            ],
+        }),
+        new ZipPlugin({
+            filename: 'youtube-ad-muffler.zip',
+            path: path.join(__dirname, "../dist/firefox"),
         }),
     ],
 };

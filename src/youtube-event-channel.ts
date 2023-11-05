@@ -1,5 +1,3 @@
-import {waitForElement} from "./util";
-
 const APP_TAG = 'yt-ad-muffler';
 
 enum YoutubeEvent {
@@ -55,7 +53,37 @@ export default class YoutubeEventChannel {
         });
     }
 
-    private getYoutubeVideoId(): string|null {
+    private waitForYoutubePlayer(): Promise<HTMLElement | null> {
+        return Promise.race([
+            new Promise<HTMLElement>(resolve => {
+                let ytdPlayer: HTMLElement | null = document.getElementById('ytd-player');
+
+                // The ytd-player is loaded once the video element is also added to the DOM
+                if (ytdPlayer?.querySelector('video')) {
+                    return resolve(ytdPlayer);
+                }
+
+                const observer = new MutationObserver(() => {
+                    if (!ytdPlayer) {
+                        ytdPlayer = document.getElementById('ytd-player');
+                    }
+
+                    if (ytdPlayer?.querySelector('video')) {
+                        observer.disconnect();
+                        resolve(ytdPlayer);
+                    }
+                });
+
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            }),
+            new Promise<null>(resolve => setTimeout(resolve, 10000, null)),
+        ]);
+    }
+
+    private getYoutubeVideoId(): string | null {
         return (new URL(window.location.href)).searchParams.get('v');
     }
 
@@ -72,7 +100,7 @@ export default class YoutubeEventChannel {
 
             if (currentVideoId !== this.videoId) {
                 if (this.videoId === null) {
-                    this.ytdPlayer = await waitForElement('#ytd-player:has(video)');
+                    this.ytdPlayer = await this.waitForYoutubePlayer();
                     this.dispatchYoutubeEvent(YoutubeEvent.OpenedVideoPage);
                 } else if (currentVideoId === null) {
                     this.ytdPlayer = null;
@@ -93,7 +121,7 @@ export default class YoutubeEventChannel {
         }
 
         if (!this.ytdPlayer) {
-            this.ytdPlayer = await waitForElement('#ytd-player:has(video)');
+            this.ytdPlayer = await this.waitForYoutubePlayer();
 
             if (!this.ytdPlayer) {
                 this.isRunningCheck = false;
@@ -102,9 +130,9 @@ export default class YoutubeEventChannel {
         }
 
         const currentAdId = this.ytdPlayer
-            .querySelector('.ytp-ad-visit-advertiser-button')
-            ?.getAttribute('aria-label')
-        ?? null;
+                .querySelector('.ytp-ad-visit-advertiser-button')
+                ?.getAttribute('aria-label')
+            ?? null;
 
         if (currentAdId !== this.adId) {
             if (this.adId === null) {
@@ -130,7 +158,9 @@ export default class YoutubeEventChannel {
     }
 
     private addYoutubeEventListener(tag: YoutubeEvent, handler: () => void) {
-        document.addEventListener(tag, () => handler());
+        document.addEventListener(tag, () => {
+            handler();
+        });
     }
 
     getYoutubePlayer() {
