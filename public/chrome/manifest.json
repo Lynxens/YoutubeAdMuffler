@@ -1,6 +1,6 @@
 {
   "name": "YouTube AdMuffler",
-  "description": "Chrome extension that dulls ads in YouTube videos by muting them, speeding them up and adjusting the color scale.",
+  "description": "Extension that dulls ads in YouTube videos by muting them, speeding them up and adjusting the color scale.",
   "version": "1.0",
   "manifest_version": 3,
   "content_scripts":[

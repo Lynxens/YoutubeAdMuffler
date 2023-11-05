@@ -35,6 +35,9 @@ module.exports = {
         new ZipPlugin({
             filename: 'youtube-ad-muffler.zip',
             path: path.join(__dirname, "../dist/firefox"),
+            exclude: [
+                '/\.xpi$/',
+            ],
         }),
     ],
 };

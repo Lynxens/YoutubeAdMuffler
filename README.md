@@ -1,22 +1,26 @@
 # YouTube - AdMuffler
 
-Chrome extension that dulls ads in YouTube videos by
+Chrome & Firefox extension that dulls ads in YouTube videos by
 - Muting them.
 - Speeding them up by 16x.
 - Adjusting the color scale to a darkened gray scale.
 
-## Requirements
+## Installation
+### Chrome
+1. Open `chrome://extensions/` in you Chrome browser.
+2. Turn on developer mode in the top right.
+3. Click on 'Load unpacked'.
+4. Select the 'dist/chrome' folder of this directory.
+
+### Firefox
+1. Open `about:addons` in your Firefox browser
+2. Select Settings -> Install add-on from file
+3. Select the xpi file in the `dist/firefox` of this directory.
+
+## Build
+Requirements: 
 - npm (`^9.5.1`)
 
-## Setup
-### Firefox
+Instructions
 1. Install packages: `npm ci`
 2. Build: `npm run build`
-
-### Chrome
-1. Install packages: `npm ci`
-2. Build: `npm run build`
-3. Open `chrome://extensions/` in you Chrome browser.
-4. Turn on developer mode in the top right.
-5. Click on 'Load unpacked'.
-6. Select the 'dist/chrome' folder of this directory.
