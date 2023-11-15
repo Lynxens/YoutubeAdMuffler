@@ -21,6 +21,8 @@ async function setupAdMuffler() {
         if (!isDullingAd) {
             startAdMuffling();
         }
+
+        trySkipAd();
     });
 
     youtubeEventChannel.onNextAd(() => {
@@ -77,6 +79,14 @@ async function setupAdMuffler() {
         }
 
         isDullingAd = false;
+    }
+
+    function trySkipAd() {
+        if (!youtubePlayer) {
+            return;
+        }
+
+        (<HTMLButtonElement|null>youtubePlayer.querySelector('button.ytp-ad-skip-button-modern'))?.click();
     }
 }
 setupAdMuffler();

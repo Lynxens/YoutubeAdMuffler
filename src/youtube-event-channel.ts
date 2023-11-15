@@ -37,6 +37,8 @@ export default class YoutubeEventChannel {
                 video.addEventListener('canplay', () => this.checkForPageChanges());
                 video.addEventListener('canplaythrough', () => this.checkForPageChanges());
                 video.addEventListener('playing', () => this.checkForPageChanges());
+                video.addEventListener('pause', () => this.checkForPageChanges());
+                video.addEventListener('emptied', () => this.checkForPageChanges());
             });
         };
 
