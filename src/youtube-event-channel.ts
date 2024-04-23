@@ -132,7 +132,7 @@ export default class YoutubeEventChannel {
         }
 
         const currentAdId = this.ytdPlayer
-                .querySelector('.ytp-ad-visit-advertiser-button')
+                .querySelector('.ytp-ad-visit-advertiser-button, .ytp-visit-advertiser-link')
                 ?.getAttribute('aria-label')
             ?? null;
 
